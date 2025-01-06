@@ -4,6 +4,11 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.math.pow
 
+//Char
+fun Char.rotateLowerLetter(n: Int): Char = (this + n % 26).let { tmp ->
+    if (tmp > 'z') 'a' + (tmp - 'z') - 1 else tmp
+}
+
 //Strings
 fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).padStart(32, '0')
 
