@@ -5,6 +5,10 @@ import java.util.*
 // list
 fun List<Char>.joinChars() = joinToString(separator = "") { "$it" }
 
+infix fun <T> List<T>.rotate(steps: Int): List<T> {
+    val times = steps % size
+    return (this + this).drop(size - times).take(size)
+}
 fun <T> List<List<T>>.transpose(): List<List<T>> {
     val result = (first().indices).map { mutableListOf<T>() }.toMutableList()
     forEach { list -> result.zip(list).forEach { it.first.add(it.second) } }
