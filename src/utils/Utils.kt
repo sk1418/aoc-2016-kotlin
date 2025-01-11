@@ -11,7 +11,7 @@ fun readTestInput(name: String) = File("src/inputs", "$name-test.txt").readLines
 
 fun readInputAsInts(name: String) = File("src/inputs", "$name.txt").readLines().map { it.toInt() }
 
-fun <T : Any?> T.alsoLog(prefix: String = "${this!!::class.simpleName}", msg: (T) -> String = { t: T -> "$t" }) = apply { println("[$prefix] ${msg(this)}") }
+fun <T : Any?> T.alsoLog(prefix: String = "${this!!::class.simpleName}", msg: (T) -> Any = { t: T -> "$t" }) = apply { println("[$prefix] ${msg(this)}") }
 
 fun <T> chkTestInput(part: String, testInput: List<String>, expected: T, solveIt: (List<String>) -> T) = measureTimedValue { solveIt(testInput) }
     .also { (actual, time) ->
