@@ -1,0 +1,4 @@
+HM LM :The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.
+HG :The second floor contains a hydrogen generator.
+LG :The third floor contains a lithium generator.
+ :The fourth floor contains nothing relevant.
