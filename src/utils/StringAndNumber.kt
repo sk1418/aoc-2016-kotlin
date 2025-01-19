@@ -11,7 +11,10 @@ fun Char.rotateLowerLetter(n: Int): Char = (this + n % 26).let { tmp ->
 
 //Strings
 fun String.md5(pad: Int = 32): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).let { if (pad > 0) it.padStart(pad, '0') else it }
-
+fun String.rotate(steps: Int): String {
+    val times = steps % length
+    return this.repeat(2).drop(length - times).take(length)
+}
 fun String.toInts(sep: String = " ") = split(sep.toRegex()).map { it.toInt() }
 fun String.toLongs(sep: String = " ") = split(sep.toRegex()).map { it.toLong() }
 
