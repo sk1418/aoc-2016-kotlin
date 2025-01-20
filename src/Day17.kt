@@ -12,6 +12,7 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
+
         return 0
     }
 
