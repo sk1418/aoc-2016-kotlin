@@ -58,6 +58,7 @@ open class Matrix<T : Any>(val maxX: Int, val maxY: Int, open val points: Map<Pa
 
 enum class Direction {
     Left, Up, Right, Down;
+    override fun toString() = name.first().toString()
 
     fun isHorizontal() = this == Left || this == Right
     fun isVertical() = this == Up || this == Down
