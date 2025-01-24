@@ -10,7 +10,7 @@ fun main() {
     //    https://www.youtube.com/watch?v=uCsD3ZGzMgE&ab_channel=Numberphile
     fun part1(input: List<String>): Int {
         val num = input.single().toInt()
-        return num.toString(2).let { it.rotate(it.length - 1).toInt(2) }
+        return num.toString(2).let { it.rotateLeft( 1).toInt(2) }
     }
 
     fun part2(input: List<String>): Int {

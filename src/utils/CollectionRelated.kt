@@ -5,7 +5,7 @@ import java.util.*
 // list
 fun List<Char>.joinChars() = joinToString(separator = "") { "$it" }
 
-infix fun <T> List<T>.rotate(steps: Int): List<T> {
+infix fun <T> List<T>.rotateRight(steps: Int): List<T> {
     val times = steps % size
     return (this + this).drop(size - times).take(size)
 }

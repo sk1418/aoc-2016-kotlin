@@ -26,12 +26,12 @@ fun main() {
 private class MatrixDay08(maxX: Int, maxY: Int, override val points: MutableNotNullMap<Pair<Int, Int>, Char>, val actions: List<String>) : Matrix<Char>(maxX = maxX, maxY = maxY, points = points) {
     private val rect = { w: Int, t: Int -> (0..<w).forEach { x -> (0..<t).forEach { y -> points[x to y] = '█' } } }
     private val rotateCol = { x: Int, steps: Int ->
-        val r = (0..maxY).map { y -> points[x to y] } rotate steps
+        val r = (0..maxY).map { y -> points[x to y] } rotateRight steps
         (0..maxY).forEach { y -> points[x to y] = r[y] }
     }
 
     private val rotateRow = { y: Int, steps: Int ->
-        val r = (0..maxX).map { x -> points[x to y] } rotate steps
+        val r = (0..maxX).map { x -> points[x to y] } rotateRight steps
         (0..maxX).forEach { x -> points[x to y] = r[x] }
     }
 
