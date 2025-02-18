@@ -1,7 +1,5 @@
 import utils.*
 import utils.Direction.*
-import java.util.*
-import kotlin.collections.ArrayDeque
 
 // https://adventofcode.com/2016/day/17
 fun main() {
@@ -39,10 +37,10 @@ private class MatrixDay17(
         return listOf(Up, Down, Left, Right).filterIndexed { idx, _ -> opens[idx] }
     }
 
-    private val pQueue = PriorityQueue<Pos> { p1, p2 -> p1.code.length.compareTo(p2.code.length) }.also { it.add(Pos(0 to 0, passcode)) }
+    private val pQueue = ArrayDeque<Pos>().also { it.add(Pos(0 to 0, passcode)) }
     fun bfs(): String {
         while (pQueue.isNotEmpty()) {
-            val curPos = pQueue.remove()
+            val curPos = pQueue.removeFirst()
             if (curPos.xy == 3 to 3) return curPos.code.drop(passcode.length)
             pQueue.addAll(with(curPos) { openDoors(code).map { Pos(xy.move(it), code + it) }.filter { it.xy.validAndExist() } })
         }
