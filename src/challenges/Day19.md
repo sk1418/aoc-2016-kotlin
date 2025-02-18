@@ -1,3 +1,4 @@
+[Solution](../Day19.kt)
 ## \--- Day 19: An Elephant Named Joseph ---
 
 The Elves contact you over a highly secure emergency channel. Back at the North Pole, the Elves are busy misunderstanding [White Elephant parties](https://en.wikipedia.org/wiki/White_elephant_gift_exchange).

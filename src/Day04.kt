@@ -21,7 +21,7 @@ private val re = """^([a-z-]+)-(\d+)\[([a-z]+)\]$""".toRegex()
 
 private class Day04(val input: List<String>) {
     private fun realRoomSectorId(line: String): Int {
-        val (letters, sectorId, chksum) = re.find(line)!!.groupValues.drop(1)
+        val (letters, sectorId, chksum) = re.find(line)?.destructured!!
         val result = buildList {
             letters.replace("-", "")
                 .groupBy { it }.mapValues { it.value.size }.entries

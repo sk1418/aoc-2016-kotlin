@@ -1,3 +1,7 @@
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import utils.*
 
 // https://adventofcode.com/2016/day/24
@@ -33,14 +37,15 @@ private class MatrixDay24(maxX: Int, maxY: Int, override val points: NotNullMap<
     private val allNodes: List<Point> = points.filter { (_, c) -> c.isDigit() }.entries.toList().sortedBy { it.value }.map { it.key }
     private val start = allNodes.first()
 
-    private val shortPathMap: NotNullMap<Set<Point>, Int> = allNodes.combinations(2).associate { twoNodes ->
-        twoNodes.toSet() to bfs(twoNodes.first(), twoNodes.last())
-    }.toNotNullMap()
+    private val shortPathMap: NotNullMap<Set<Point>, Int> = runBlocking(Dispatchers.Default) {
+        allNodes.combinations(2).map { twoNodes ->
+            async { twoNodes.toSet() to bfs(twoNodes.first(), twoNodes.last()) }
+        }.awaitAll().associate { (twoPoints, shortPathDef) -> twoPoints to shortPathDef }.toNotNullMap()
+    }
 
     private fun bfs(p1: Point, p2: Point): Int {
         val unvisited = ArrayDeque<PointSteps>()
         unvisited.add(PointSteps(p1, 0))
-
         val visited = mutableSetOf<Point>()
         while (unvisited.isNotEmpty()) {
             val current = unvisited.removeFirst().also { visited.add(it.point) }
@@ -56,22 +61,23 @@ private class MatrixDay24(maxX: Int, maxY: Int, override val points: NotNullMap<
     private fun tsp(currentIdx: Int, visitedMask: Int, cache: MutableMap<Pair<Int, Int>, Int>, returnToStart: Boolean): Int {
         val goal = (1 shl allNodes.size) - 1 // 1111..1
         val key = currentIdx to visitedMask
-        if (key in cache) return cache[key]!!
+        return cache.getOrPut(key) {
 
-        // If all nodes visited, return distance back to start (for Part 2)
-        if (visitedMask == goal) {
-            return if (returnToStart) shortPathMap[setOf(allNodes[currentIdx], start)] else 0
-        }
-
-        var minDist = Int.MAX_VALUE
-        for (nextIdx in allNodes.indices) {
-            if ((visitedMask and (1 shl nextIdx)) == 0) { // If next node not visited
-                val newMask = visitedMask or (1 shl nextIdx)
-                val distance = shortPathMap[setOf(allNodes[currentIdx], allNodes[nextIdx])]
-                minDist = minOf(minDist, distance + tsp(nextIdx, newMask, cache, returnToStart))
+            // If all nodes visited, return distance back to start (for Part 2)
+            if (visitedMask == goal) {
+                return if (returnToStart) shortPathMap[setOf(allNodes[currentIdx], start)] else 0
             }
+
+            var minDist = Int.MAX_VALUE
+            for (nextIdx in allNodes.indices) {
+                if ((visitedMask and (1 shl nextIdx)) == 0) { // If next node not visited
+                    val newMask = visitedMask or (1 shl nextIdx)
+                    val distance = shortPathMap[setOf(allNodes[currentIdx], allNodes[nextIdx])]
+                    minDist = minOf(minDist, distance + tsp(nextIdx, newMask, cache, returnToStart))
+                }
+            }
+            minDist
         }
-        return cache.put(key, minDist) ?: minDist
     }
 
     fun solveIt(returnToStart: Boolean = false): Int {
